@@ -6,6 +6,12 @@ Whenever the user clicks on the `ProfilePicture` component, the image source sho
 
 This is called _State Up-Lifting_ and the `ProfilePicture` component is a _Controlled Component_. Learn more about this here: [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components).
 
+
+
+https://github.com/user-attachments/assets/163f2d00-5f4c-4ccb-b631-cc1283a239f3
+
+
+
 ## 1. Preperation
 
 In `app/page.tsx` (`Home` component):
@@ -63,6 +69,12 @@ test.each([
 > You may want to use the [user-event](https://testing-library.com/docs/user-event/intro) library to simulate clicks.
 
 ## 6. Show the previously shown Profile
+
+
+
+https://github.com/user-attachments/assets/1aae9d84-ecea-4766-93d1-eae4d9d1a531
+
+
 
 **Hint**
 
