@@ -1,41 +1,85 @@
-# Next.js Workshop: Props (callbacks)
+# Next.js Workshop: useState Hook
 
-In this task we'd like to notify the parent component `Home` on each click on the `ProfilePicture` component.
+In this task you will use [useState](https://react.dev/reference/react/useState) React Hook that lets you add a state variable to your component.
 
-## 1. Introduce the callback `onClick` as optional prop of the `ProfilePicture` component.
+Whenever the user clicks on the `ProfilePicture` component, the image source should change. The state is controlled by parent component `Home` in `app/page.tsx`.
 
-The Payload of this event is the _pictureUrl_.
+This is called _State Up-Lifting_ and the `ProfilePicture` component is a _Controlled Component_. Learn more about this here: [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components).
 
-Hint:
+## 1. Preperation
 
-```ts
-onClick?: (profileUrl: string) => void
-```
+In `app/page.tsx` (`Home` component):
 
-## 2. Emit, whenever the user clicks on the `<div>` element.
+Make sure you have exactly one instance of the `ProfilePicture` component.
 
-Hint:
-`profile-picture.tsx`:
+Bind a `pictureClicked(pictureUrl: string)` function to the `onClick` prop.
+
+> [!HINT]
+> You might need to adjust the tests (`app/page.test.tsx`)
+
+## 2. Introduce a state variable `pictureIndex`.
+
+In `app/page.tsx` (`Home` component):
 
 ```tsx
-<div onClick={() => onClick?.(profileUrl)}></div>
+const [pictureIndex, setPictureIndex] = useState(1);
 ```
 
-## 3. Add additional test
+## 3. Compute `pictureUrl` based on this state variable.
 
-Test, that the component `acts on click, with %s`.
+In `app/page.tsx` (`Home` component):
 
-You may want to use [vi.fn](https://vitest.dev/api/vi.html#vi-fn)
-
-## 4. In `Home` component: Pass callback to the prop `onClick`
-
-`console.log(...)` the received `pictureUrl`.
-
-> [!WARNING]
-> Make sure to have the [use client](https://nextjs.org/docs/app/api-reference/directives/use-client) directive on top of the `app/page.tsx` file.
-
-## 5. Optional: Add hover CSS transition
-
+```tsx
+const pictureUrl = `https://randomuser.me/api/portraits/women/${pictureIndex}.jpg`;
 ```
-hover:opacity-70 transition-opacity duration-300 hover:cursor-pointer
+
+Bind computed value to the `profileUrl` prop.
+
+## 4. Implement the `pictureClicked(pictureUrl: string)` function.
+
+Use a round robin strategy to cycle through the values in the range [1..99], based on the `pictureIndex`.
+
+Use `setPictureIndex()` to set the new value.
+
+> [!HINT]
+> Don't use the `pictureUrl` argument for now. It will be usefull later on.
+
+## 5. Add test cases for `Home` component
+
+```tsx
+test.each([
+  [1, 'https://randomuser.me/api/portraits/women/2.jpg'],
+  [2, 'https://randomuser.me/api/portraits/women/3.jpg'],
+  [99, 'https://randomuser.me/api/portraits/women/0.jpg'],
+])(
+  'Profile Picture changes on %i click to %s',
+  async (numClicks: number, nextProfileUrl: string) => {
+    // TODO: implement me
+  },
+);
+```
+
+> [!HINT]
+> You may want to use the [user-event](https://testing-library.com/docs/user-event/intro) library to simulate clicks.
+
+## 6. Show the previously shown Profile
+
+**Hint**
+
+`app/page.tsx`:
+
+```tsx
+<div className="flex gap-4">
+  {previousPictureUrl ? (
+    <ProfilePicture profileUrl={previousPictureUrl} />
+  ) : (
+    <div
+      style={{
+        width: 100,
+        height: 100,
+      }}
+    ></div>
+  )}
+  <ProfilePicture profileUrl={pictureUrl} onClick={profilePictureClicked} />
+</div>
 ```
